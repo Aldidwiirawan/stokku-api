@@ -46,6 +46,16 @@ class UserFactory extends Factory
     }
 
     /**
+     * Jadikan akun pengguna nonaktif.
+     */
+    public function inactive(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'is_active' => false,
+        ]);
+    }
+
+    /**
      * Indicate that the model's email address should be unverified.
      */
     public function unverified(): static

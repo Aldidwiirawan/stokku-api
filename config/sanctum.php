@@ -50,7 +50,9 @@ return [
     |
     */
 
-    'expiration' => null,
+    // StokKu: token berlaku 30 hari sejak login (30 × 24 × 60 = 43200 menit).
+    // Bisa diubah lewat SANCTUM_EXPIRATION di .env (dalam menit).
+    'expiration' => (int) env('SANCTUM_EXPIRATION', 43200),
 
     /*
     |--------------------------------------------------------------------------

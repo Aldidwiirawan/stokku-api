@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\AccountInactiveException;
 use App\Http\Requests\LoginRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
@@ -32,7 +33,7 @@ class AuthController extends Controller
         // Status aktif baru dicek setelah password terbukti benar,
         // jadi hanya pemilik akun yang tahu akunnya nonaktif.
         if (! $user->is_active) {
-            abort(403, 'Akun Anda nonaktif. Hubungi admin.');
+            throw new AccountInactiveException; // 403 + "code": "account_inactive"
         }
 
         $token = $user->createToken($request->validated('device_name'))->plainTextToken;

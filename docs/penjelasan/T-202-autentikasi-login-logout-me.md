@@ -70,14 +70,14 @@ if ($user === null || ! Hash::check($request->validated('password'), $user->pass
 }
 
 if (! $user->is_active) {
-    abort(403, 'Akun Anda nonaktif. Hubungi admin.');
+    throw new AccountInactiveException;   // diubah di T-203 (sebelumnya abort(403, '...'))
 }
 
 $token = $user->createToken($request->validated('device_name'))->plainTextToken;
 ```
 - `Hash::check(...)` → membandingkan password yang diketik dengan hash di database. Password tidak pernah disimpan dalam bentuk asli.
 - `ValidationException::withMessages` → dirender (T-201) menjadi `{"message":"Data tidak valid.","errors":{"email":["Email atau password salah."]}}` (422).
-- `abort(403, '...')` → dirender (T-201) dengan pesan ini, karena pesan dari kode kita sendiri dipertahankan.
+- `AccountInactiveException` → 403 `{"message": "Akun Anda nonaktif. Hubungi admin.", "code": "account_inactive"}`. Field `code` ditambahkan di T-203 supaya aplikasi bisa membedakan akun nonaktif dari 403 lain (lihat file penjelasan T-203).
 - `createToken(...)->plainTextToken` → token dalam bentuk asli (contoh `1|exFg...`). Hanya dikirim **sekali** ini; setelah itu server hanya menyimpan hash-nya.
 
 4. Respons 200:
@@ -108,7 +108,7 @@ return response()->noContent();   // 204
 - **Respons login memakai `JsonResource` berisi `token` + `UserResource`.** Formatnya mengikuti PRD (`{ "data": { ... } }`). `UserResource` di dalamnya tidak dibungkus `data` lagi, karena Laravel hanya membungkus resource paling luar.
 - **Token belum punya masa berlaku** (`config/sanctum.php` → `expiration => null`). Token berlaku sampai logout. Ini cocok untuk aplikasi di HP pribadi. Kalau nanti ingin token kedaluwarsa (misalnya 30 hari), cukup ubah `expiration`; aplikasi sudah siap karena 401 → kembali ke login (F-04).
 - **Email dinormalisasi di dua tempat, dengan tugas berbeda (usul Aldi).** Mutator di model menjamin semua email yang **disimpan** huruf kecil, sedangkan `LoginRequest` menjamin email yang **dicari** saat login juga huruf kecil. Alternatifnya, query `whereRaw('lower(email) = ?')`, ditolak karena membuat index `users_email_unique` tidak terpakai dan tetap tidak merapikan data yang disimpan. Data lama di Supabase tidak perlu diubah, karena kedua akun demo sudah huruf kecil.
-- **Pengecekan akun nonaktif untuk request setelah login** (misalnya admin menonaktifkan akun yang sedang login) belum ada di sini. Itu ruang lingkup T-203.
+- **Pengecekan akun nonaktif untuk request setelah login** (misalnya admin menonaktifkan akun yang sedang login) dikerjakan di T-203 (middleware `active`).
 
 ## Cara mengetes sendiri
 

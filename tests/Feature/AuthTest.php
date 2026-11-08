@@ -119,7 +119,10 @@ class AuthTest extends TestCase
 
         $this->postJson(self::LOGIN_URL, $this->credentials())
             ->assertForbidden()
-            ->assertExactJson(['message' => 'Akun Anda nonaktif. Hubungi admin.']);
+            ->assertExactJson([
+                'message' => 'Akun Anda nonaktif. Hubungi admin.',
+                'code' => 'account_inactive',
+            ]);
 
         $this->assertDatabaseCount('personal_access_tokens', 0);
     }

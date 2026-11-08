@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Middleware\EnsureUserHasRole;
+use App\Http\Middleware\EnsureUserIsActive;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Application;
@@ -21,6 +23,12 @@ return Application::configure(basePath: dirname(__DIR__))
         // StokKu hanya API (tanpa halaman login web), jadi tidak diarahkan ke mana pun;
         // hasilnya AuthenticationException → dirender jadi JSON 401 di bawah.
         $middleware->redirectGuestsTo(null);
+
+        // Nama pendek middleware untuk dipakai di routes/api.php.
+        $middleware->alias([
+            'role' => EnsureUserHasRole::class,     // ->middleware('role:admin')
+            'active' => EnsureUserIsActive::class,  // ->middleware('active')
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         // Semua error di /api/* selalu dikirim sebagai JSON, walaupun aplikasi
