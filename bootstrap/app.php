@@ -60,7 +60,7 @@ return Application::configure(basePath: dirname(__DIR__))
             ], $e->status);
         });
 
-        // 403, 404, 429: dibedakan dari status code-nya.
+        // 403, 404, 409, 429: dibedakan dari status code-nya.
         $exceptions->render(function (HttpExceptionInterface $e, Request $request) {
             if (! $request->is('api/*')) {
                 return null;
@@ -78,6 +78,9 @@ return Application::configure(basePath: dirname(__DIR__))
                 $message = $e->getPrevious() instanceof ModelNotFoundException
                     ? 'Data tidak ditemukan.'
                     : 'Endpoint tidak ditemukan.';
+            } elseif ($status === 409) {
+                // Konflik: pesan selalu dari kode kita sendiri, contoh abort(409, 'Kategori ...').
+                $message = $e->getMessage() !== '' ? $e->getMessage() : 'Data bentrok dengan data lain.';
             } elseif ($status === 429) {
                 $message = 'Terlalu banyak percobaan. Coba lagi sebentar.';
             } else {

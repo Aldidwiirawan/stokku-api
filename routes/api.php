@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PingController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -28,5 +29,11 @@ Route::prefix('v1')->name('v1.')->group(function () {
 
         Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
         Route::post('/profile/photo', [ProfileController::class, 'updatePhoto'])->name('profile.photo');
+
+        // Kategori: semua peran boleh melihat; tambah/ubah/hapus khusus Admin.
+        Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
+        Route::apiResource('categories', CategoryController::class)
+            ->only(['store', 'update', 'destroy'])
+            ->middleware('role:admin');
     });
 });
