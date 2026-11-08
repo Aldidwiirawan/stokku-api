@@ -6,11 +6,13 @@ use Database\Factories\ItemFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
 
 // `stock` sengaja tidak fillable: stok hanya boleh berubah lewat transaksi.
 // `photo_path` diisi dari hasil upload foto, bukan dari input teks.
@@ -32,6 +34,20 @@ class Item extends Model
             'stock' => 'integer',
             'min_stock' => 'integer',
         ];
+    }
+
+    /**
+     * Mutator SKU: selalu disimpan huruf besar tanpa spasi di awal/akhir,
+     * dari jalur mana pun (API, seeder, Tinker, factory). Karena itu index unik
+     * items_sku_unique otomatis berlaku tanpa membedakan huruf besar/kecil.
+     *
+     * @return Attribute<string, string>
+     */
+    protected function sku(): Attribute
+    {
+        return Attribute::make(
+            set: fn (string $value) => Str::upper(trim($value)),
+        );
     }
 
     /**

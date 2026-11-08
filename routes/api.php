@@ -37,8 +37,13 @@ Route::prefix('v1')->name('v1.')->group(function () {
             ->only(['store', 'update', 'destroy'])
             ->middleware('role:admin');
 
-        // Bahan: daftar & detail untuk semua peran (tambah/ubah/hapus di T-207).
+        // Bahan: daftar & detail untuk semua peran; tambah/ubah/hapus khusus Admin.
+        // Ubah dari aplikasi: POST /items/{item} + field _method=PUT (multipart),
+        // Laravel memperlakukannya sebagai PUT (method spoofing).
         Route::get('/items', [ItemController::class, 'index'])->name('items.index');
         Route::get('/items/{item}', [ItemController::class, 'show'])->name('items.show');
+        Route::apiResource('items', ItemController::class)
+            ->only(['store', 'update', 'destroy'])
+            ->middleware('role:admin');
     });
 });

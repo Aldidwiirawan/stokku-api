@@ -19,6 +19,7 @@ return [
     'current_password' => 'Password lama salah.',
     'date' => ':Attribute bukan tanggal yang valid.',
     'date_format' => ':Attribute harus berformat :format.',
+    'decimal' => ':Attribute harus memiliki :decimal angka di belakang koma.',
     'email' => ':Attribute harus berupa alamat email yang valid.',
     'enum' => ':Attribute yang dipilih tidak valid.',
     'exists' => ':Attribute yang dipilih tidak ditemukan.',
@@ -38,6 +39,7 @@ return [
         'string' => ':Attribute maksimal :max karakter.',
     ],
     'mimes' => ':Attribute harus berupa file bertipe: :values.',
+    'missing' => ':Attribute tidak boleh dikirim.',
     'min' => [
         'array' => ':Attribute minimal berisi :min item.',
         'file' => ':Attribute minimal :min kilobyte.',
@@ -70,6 +72,7 @@ return [
         'unit' => 'satuan',
         'price' => 'harga',
         'min_stock' => 'stok minimum',
+        'stock' => 'stok',
         'description' => 'keterangan',
         'item_id' => 'bahan',
         'type' => 'jenis transaksi',
