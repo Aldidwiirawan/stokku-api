@@ -30,6 +30,17 @@ class StockMovementResource extends JsonResource
                 'id' => $this->user->id,
                 'name' => $this->user->name,
             ]),
+            // Data bahan SAAT INI (bukan saat transaksi). Dipakai aplikasi untuk
+            // menampilkan stok terbaru dan memicu notifikasi stok menipis (F-21).
+            'item' => $this->whenLoaded('item', fn () => [
+                'id' => $this->item->id,
+                'sku' => $this->item->sku,
+                'name' => $this->item->name,
+                'unit' => $this->item->unit,
+                'stock' => $this->item->stock,
+                'min_stock' => $this->item->min_stock,
+                'is_low_stock' => $this->item->stock <= $this->item->min_stock,
+            ]),
         ];
     }
 }

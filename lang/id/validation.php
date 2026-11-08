@@ -48,6 +48,7 @@ return [
     ],
     'numeric' => ':Attribute harus berupa angka.',
     'prohibited' => ':Attribute tidak boleh diisi.',
+    'prohibited_unless' => ':Attribute hanya boleh diisi jika :other adalah :values.',
     'required' => ':Attribute wajib diisi.',
     'required_if' => ':Attribute wajib diisi jika :other adalah :value.',
     'required_with' => ':Attribute wajib diisi jika :values diisi.',

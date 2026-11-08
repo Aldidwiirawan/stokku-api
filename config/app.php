@@ -69,6 +69,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Zona waktu bisnis (StokKu)
+    |--------------------------------------------------------------------------
+    |
+    | Database dan aplikasi tetap UTC (jangan ubah 'timezone' di atas).
+    | Zona ini hanya dipakai untuk menafsirkan tanggal dari pengguna, misalnya
+    | filter riwayat "tanggal 9 Nov" = 9 Nov 00:00–23:59 WIB, lalu diubah ke UTC.
+    |
+    */
+
+    'business_timezone' => env('APP_BUSINESS_TIMEZONE', 'Asia/Jakarta'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Locale Configuration
     |--------------------------------------------------------------------------
     |

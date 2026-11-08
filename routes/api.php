@@ -5,6 +5,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\PingController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\StockMovementController;
 use Illuminate\Support\Facades\Route;
 
 // Semua route di file ini otomatis berawalan /api (diatur di bootstrap/app.php).
@@ -45,5 +46,10 @@ Route::prefix('v1')->name('v1.')->group(function () {
         Route::apiResource('items', ItemController::class)
             ->only(['store', 'update', 'destroy'])
             ->middleware('role:admin');
+
+        // Transaksi stok: semua peran. Penyesuaian (adjust) dibatasi Admin
+        // di StoreStockMovementRequest; Staf hanya melihat riwayat miliknya.
+        Route::get('/stock-movements', [StockMovementController::class, 'index'])->name('stock-movements.index');
+        Route::post('/stock-movements', [StockMovementController::class, 'store'])->name('stock-movements.store');
     });
 });
