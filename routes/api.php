@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ItemController;
 use App\Http\Controllers\PingController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -35,5 +36,9 @@ Route::prefix('v1')->name('v1.')->group(function () {
         Route::apiResource('categories', CategoryController::class)
             ->only(['store', 'update', 'destroy'])
             ->middleware('role:admin');
+
+        // Bahan: daftar & detail untuk semua peran (tambah/ubah/hapus di T-207).
+        Route::get('/items', [ItemController::class, 'index'])->name('items.index');
+        Route::get('/items/{item}', [ItemController::class, 'show'])->name('items.show');
     });
 });

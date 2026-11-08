@@ -79,6 +79,8 @@ return [
         'from' => 'tanggal mulai',
         'to' => 'tanggal akhir',
         'search' => 'kata kunci',
+        'low_stock' => 'filter stok menipis',
+        'page' => 'halaman',
     ],
 
     /*
