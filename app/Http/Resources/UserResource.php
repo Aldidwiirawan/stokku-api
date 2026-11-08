@@ -3,9 +3,9 @@
 namespace App\Http\Resources;
 
 use App\Models\User;
+use App\Support\StorageUrl;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Storage;
 
 /**
  * @mixin User
@@ -26,10 +26,8 @@ class UserResource extends JsonResource
             'email' => $this->email,
             'role' => $this->role,
             'is_active' => $this->is_active,
-            // URL lengkap supaya aplikasi bisa langsung menampilkan fotonya.
-            'photo_url' => $this->photo_path
-                ? Storage::disk('public')->url($this->photo_path)
-                : null,
+            // URL lengkap dari host request, supaya aplikasi bisa langsung menampilkan fotonya.
+            'photo_url' => StorageUrl::publicUrl($this->photo_path),
             // ISO 8601 dalam UTC, contoh: 2026-11-08T02:17:34+00:00
             'created_at' => $this->created_at?->toIso8601String(),
         ];

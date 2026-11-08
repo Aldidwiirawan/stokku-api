@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PingController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 // Semua route di file ini otomatis berawalan /api (diatur di bootstrap/app.php).
@@ -24,5 +25,8 @@ Route::prefix('v1')->name('v1.')->group(function () {
     // Route khusus Admin ditambah ->middleware('role:admin').
     Route::middleware(['auth:sanctum', 'active'])->group(function () {
         Route::get('/auth/me', [AuthController::class, 'me'])->name('auth.me');
+
+        Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+        Route::post('/profile/photo', [ProfileController::class, 'updatePhoto'])->name('profile.photo');
     });
 });
